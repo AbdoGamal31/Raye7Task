@@ -21,19 +21,18 @@ public class FavoritesNewsPresenter implements IFavoritesNewsPresenter {
     }
 
     public void getNewsFromDatabase() {
+        favoritesView.showLoadingIndicator();
         favouritesNews.mapFavoritesNewsEntityToArticle()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<Article>>() {
-                    @Override
-                    public void accept(List<Article> articleList) throws Exception {
-                        if (articleList.size() <= 0) {
-                            String errorMessage = "No current favorites news ...";
-                            int errorIcon = R.drawable.no_news;
-                            favoritesView.showErrorOverlay(errorMessage, errorIcon, false);
-                        } else {
-                            favoritesView.displayFavoritesNews(articleList);
-                        }
+                .subscribe(articleList -> {
+                    favoritesView.hideLoadingIndicator();
+                    if (articleList.size() <= 0) {
+                        String errorMessage = "No current favorites news ...";
+                        int errorIcon = R.drawable.no_news;
+                        favoritesView.showErrorOverlay(errorMessage, errorIcon, false);
+                    } else {
+                        favoritesView.displayFavoritesNews(articleList);
                     }
                 });
 

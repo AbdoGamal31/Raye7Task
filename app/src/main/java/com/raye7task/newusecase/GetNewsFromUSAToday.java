@@ -13,7 +13,7 @@ import io.reactivex.Observable;
 
 public class GetNewsFromUSAToday {
     INewsRepository iNewsRepository;
-    String USATodayID = "The New York Times";
+    String USATodayID = "USA Today";
 
     public GetNewsFromUSAToday() {
         this.iNewsRepository = new NewsRepository(new NewsRemoteDataStore());

@@ -1,5 +1,8 @@
 package com.raye7task.newspresenter;
 
+import com.raye7task.MyApplication;
+import com.raye7task.R;
+import com.raye7task.network.NetworkError;
 import com.raye7task.newsview.IAllNews;
 import com.raye7task.newusecase.GetNewsFromUSAToday;
 
@@ -26,7 +29,19 @@ public class AllNewsPresenter implements INewsPresenter {
                     iAllNews.hideLoadingIndicator();
                 }, throwable ->
                 {
+
+                    if (throwable instanceof NetworkError) {
+                        String errorMessage = "No internet connection, check your connection and try again later ...";
+                        int errorIcon = R.drawable.no_internet_connection;
+                        iAllNews.showErrorOverlay(errorMessage, errorIcon, true);
+                    } else {
+                        String errorMessage = "No recent news ...";
+                        int errorIcon = R.drawable.no_news;
+                        iAllNews.showErrorOverlay(errorMessage, errorIcon,false);
+                    }
                     iAllNews.hideLoadingIndicator();
+
                 });
     }
+
 }

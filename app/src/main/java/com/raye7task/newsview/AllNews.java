@@ -1,5 +1,6 @@
 package com.raye7task.newsview;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.raye7task.R;
 import com.raye7task.newsmodel.Article;
@@ -51,6 +53,7 @@ public class AllNews extends Fragment implements IAllNews {
         loadingInductor = new ProgressDialog(getContext());
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,4 +125,21 @@ public class AllNews extends Fragment implements IAllNews {
         newsParentRecViewAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showErrorOverlay(String errorMessage, int errorIcon, boolean b) {
+        Dialog dialog = buildShowErrorOverlay(getContext(), errorMessage, errorIcon);
+        Button dialogButton = (Button) dialog.findViewById(R.id.btn_overlay_primary);
+        if (!b) {
+            dialogButton.setText(R.string.okay);
+            dialogButton.setOnClickListener(v -> {
+                dialog.dismiss();
+            });
+        } else {
+            dialogButton.setOnClickListener(v -> {
+                dialog.dismiss();
+                iNewsPresenter.getAllNewsFromUSATodayGroupedByDay();
+            });
+        }
+        dialog.show();
+    }
 }
